@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_partner_exonerated_form" model="ir.ui.view">
+        <field name="name">res.partner.exonerated.form</field>
+        <field name="model">res.partner.exonerated</field>
+        <field name="arch" type="xml">
+            <form string="Cliente Exonerado">
+                <sheet>
+                    <group>
+                        <group>
+                            <label for="numero_documento" string="N°Exoneración"/>
+                            <div>
+                                <field name="numero_documento" class="mb-0 oe_inline text-center"
+                                       placeholder="*Ingrese número a buscar."/>
+                                <button name="search_exoneration" type="object" string="Búsqueda"
+                                        class="btn btn-link text-primary"
+                                        icon="fa-search"/>
+                            </div>
+                            <field name="partner_id" required="True"/>
+                            <field name="vat"/>
+                            <field name="porcentaje_exoneracion"/>
+                            <field name="tax_sale_id" domain="[('is_exoneration','=', True)]"/>
+                        </group>
+                        <group>
+                            <field name="tipo_documento"/>
+                            <field name="fecha_emision"/>
+                            <field name="fecha_vencimiento"/>
+                            <field name="institucion"/>
+                            <field name="date_issue" invisible="1"/>
+                            <field name="date_expiration" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cabys" name="page_cabys">
+                            <field name="cabys_ids" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_exonerated_tree" model="ir.ui.view">
+        <field name="name">res.partner.exonerated.tree</field>
+        <field name="model">res.partner.exonerated</field>
+        <field name="arch" type="xml">
+            <tree string="Cliente Exonerado">
+                <field name="numero_documento"/>
+                <field name="partner_id"/>
+                <field name="vat"/>
+                <field name="porcentaje_exoneracion"/>
+                <field name="cabys_ids"/>
+                <field name="tipo_documento"/>
+                <field name="fecha_emision"/>
+                <field name="fecha_vencimiento"/>
+                <field name="institucion"/>
+                <field name="date_issue" invisible="1"/>
+                <field name="date_expiration" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="res_partner_exonerated_action" model="ir.actions.act_window">
+        <field name="name">Clientes Exonerados</field>
+        <field name="res_model">res.partner.exonerated</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menuitem_res_partner_exonerated" name="Cliente Exonerados" parent="l10n_cr_base.menu_electronic_invoice"
+              sequence="200"
+              action="res_partner_exonerated_action" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+
+</odoo>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="res_partner_form_view_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.view.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="type">form</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/div[hasclass('o_address_format')]/field[@name='state_id']"
+                   position="attributes">
+                <attribute name="context">{'country_id': country_id, 'zip': zip}</attribute>
+            </xpath>
+            <field name="property_payment_term_id" position="after">
+                <field name="payment_methods_id" groups="account.group_account_invoice"/>
+            </field>
+            <field name="vat" position="replace"/>
+            <field name="website" position="before">
+                <field name="identification_id" string="Tipo identificación" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="vat" string="Nro Documento"/>
+            </field>
+<!--            <field name="category_id" position="after">-->
+<!--                <field name="has_exoneration" groups="l10n_cr_places.module_einvoice_costa_rica"/>-->
+<!--            </field>-->
+<!--            <xpath expr="//page[3]" position="after">-->
+<!--                <page name="exoneration_config" string="Exoneration"-->
+<!--                      attrs="{'invisible': [('has_exoneration', '!=', True)]}" groups="l10n_cr_places.module_einvoice_costa_rica">-->
+<!--                    <field name="exoneration_lines"  context="{'default_partner_id': id }">-->
+<!--                        <tree editable="top">-->
+<!--                            <field name="partner_id" />-->
+<!--                            <field name="numero_documento" />-->
+<!--                            <field name="porcentaje_exoneracion" />-->
+<!--                            <field name="tipo_documento" />-->
+<!--                            <field name="fecha_emision" />-->
+<!--                            <field name="fecha_vencimiento" />-->
+<!--                            <field name="institucion" />-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                </page>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+
+
+    <record id="view_partner_vat_form" model="ir.ui.view">
+        <field name="name">res.partner.vat.electronic.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="string">Nro Documento</attribute>
+            </xpath>
+            <xpath expr="//span[hasclass('o_vat_label')]" position="replace">
+                <span class="o_vat_label">Nro Documento</span>
+            </xpath>
+        </field>
+    </record>
+     <record id="view_company_form_vat" model="ir.ui.view">
+        <field name="name">res.company.form.vat.electronic.inherit</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="attributes">
+                <attribute name="string">Nro Documento</attribute>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

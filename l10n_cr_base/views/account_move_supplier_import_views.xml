@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="account_move_supplier_import_form" model="ir.ui.view">
+            <field name="name">account.move.supplier.import.form</field>
+            <field name="model">account.move.supplier.import</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                            </button>
+                        </div>
+                        <group name="main">
+                            <field name="name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="partner_id"/>
+                            <field name="server_id"/>
+                        </group>
+                        <group>
+                            <group string="Parametros contables" name="accounting">
+                                <field name="journal_id" domain="[('company_id','=',company_id),('type','=','purchase')]"/>
+                                <field name="account_id" required="True"/>
+                                <field name="account_analytic_id" groups="analytic.group_analytic_accounting"/>
+                                <field name="tax_id"/>
+                                <field name="line_type" widget="radio"/>
+                                <field name="product_id" attrs="{'invisible': [('line_type', '!=', 'product_default')],
+                                    'required': [('line_type', '=', 'product_default')]}"/>
+                            </group>
+                            <group string="Parametros pago" name="param_supplier">
+                                <field name="supplier_payment_term"/>
+                                <field name="supplier_payment_method"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="account_move_supplier_import_tree" model="ir.ui.view">
+            <field name="name">account.move.supplier.import.tree</field>
+            <field name="model">account.move.supplier.import</field>
+            <field name="arch" type="xml">
+                <tree string="Invoice Import Configurations">
+                    <field name="sequence" widget="handle"/>
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <field name="journal_id"/>
+                    <field name="account_id"/>
+                    <field name="tax_id"/>
+                    <field name="supplier_payment_term"/>
+                    <field name="supplier_payment_method"/>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="account_move_supplier_import_action" model="ir.actions.act_window">
+            <field name="name">Configuración importación facturas proveedor</field>
+            <field name="res_model">account.move.supplier.import</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="account_move_supplier_import_menu" parent="menu_electronic_invoice"
+                  action="account_move_supplier_import_action" sequence="999"
+                  name="Configuración importación factura proveedor" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+    </data>
+</odoo>

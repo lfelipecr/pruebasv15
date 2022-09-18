@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_inherit_form" model="ir.ui.view">
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='main_currency_setting_container']" position="after">
+                    <h2 groups="l10n_cr_places.module_einvoice_costa_rica">Facturación Electrónica</h2>
+                    <div class="row mt16 o_settings_container" id="e-invoicing_settings" groups="l10n_cr_places.module_einvoice_costa_rica">
+                        <div class="col-12 col-lg-12 o_setting_box" id="company_activities">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Actividades</span>
+                                <div class="text-muted">
+                                    Multiples opciones para actividades de la compañia.
+                                </div>
+                                <div class="text-muted">
+                                    <field name="activity_ids" widget="many2many_tags" attrs="{'required': [('e_environment','!=',False)]}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-12 o_setting_box" id="company_activity">
+                            <div class="o_setting_left_pane">
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Actividad principal</span>
+                                <div class="text-muted">
+                                    Seleccione la actividad principal de la compañia.
+                                </div>
+                                <div class="text-muted">
+                                    <field name="activity_default_id" domain="[('id', 'in', activity_ids)]" attrs="{'required': [('e_environment','!=',False)]}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="default_enviroment">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Entorno/Ambiente</span>
+                                <div class="text-muted">
+                                    Entorno para facturación electrónica
+                                </div>
+                                <div class="text-muted">
+                                    <field name="e_environment"/>
+                                </div>
+                                <div class="text-muted mt-4">
+                                    Diarios para almacenar los comprobantes de compra y venta electrónicos.
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16 ml-1">
+                                        <button name="create_journal_e_invoice" icon="fa-arrow-right"
+                                                type="object" string="Crear diarios para facturación" discard="0" class="btn-link"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Diario ventas" for="journal_sale_id" class="col-lg-3 o_light_label"/>
+                                        <field name="journal_sale_id" placeholder="** Seleccione"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Diario compras" for="purchase_sale_id" class="col-lg-3 o_light_label"/>
+                                        <field name="purchase_sale_id" placeholder="** Seleccione"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box"
+                             id="company_e_invoice"
+                             title="Credenciales de la compañia para envío a hacienda.">
+                            <div class="o_setting_left_pane"/>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Credenciales</span>
+                                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." aria-label="Values set here are company-specific." groups="base.group_multi_company" role="img"/>
+                                <div class="text-muted">
+                                    Datos usados para envío a hacienda.
+                                </div>
+                                <div class="content-group">
+                                    <div class="row mt16">
+                                        <label string="Llave" for="signature" class="col-lg-3 o_light_label"/>
+                                        <field name="signature"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Usuario" for="e_user" class="col-lg-3 o_light_label"/>
+                                        <field name="e_user"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Contraseña" for="e_password" class="col-lg-3 o_light_label"/>
+                                        <field name="e_password"/>
+                                    </div>
+                                    <div class="row">
+                                        <label string="Pin" for="e_pin" class="col-lg-3 o_light_label"/>
+                                        <field name="e_pin"/>
+                                    </div>
+                                    <div class="mt8">
+                                        <button name="%(l10n_cr_base.einvoice_sequence_action)d" icon="fa-arrow-right"
+                                                type="action" string="Crear secuencias" discard="0" class="btn-link"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="div_send_hacienda">
+                            <div class="o_setting_left_pane" />
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Enviar comprobante a Hacienda</span>
+                                <div class="text-muted">
+                                      Determina si el comprobante se envía a hacienda o no, esto puede efectuarse de forma manual, caso contrario,
+                                    puede definir si por defecto todos los comprobantes se enviarán a hacienda.
+                                </div>
+                                <div class="text-muted">
+                                    <field name="send_hacienda"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="div_send_mail_to_customer">
+                            <div class="o_setting_left_pane">
+                                <field name="send_mail_to_customer" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="send_mail_to_customer" string="Enviar email a cliente"/>
+                                <div class="text-muted">
+                                    Enviar email al cliente al cuando el comprobante sea aceptado por hacienda.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" id="div_bill_supplier_import">
+                            <div class="o_setting_left_pane">
+                                <field name="bill_supplier_import" class="oe_inline"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="bill_supplier_import" string="Importar facturas proveedor"/>
+                                <div class="text-muted">
+                                    Permitirá importar facturas de proveedores a partir de correos entrantes.
+                                </div>
+                                <div class="content-group">
+                                    <div class="mt8">
+                                        <button name="open_params_import_ininvoice" icon="fa-arrow-right" type="object"
+                                                string="Configure cuenta, diario e impuesto" class="btn-link"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

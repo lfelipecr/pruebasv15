@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_CodeTypeProduct,code.type.product,model_code_type_product,account.group_account_invoice,1,1,1,1
+access_PaymentMethod,payment.method,model_payment_method,account.group_account_invoice,1,1,1,1
+access_SaleConditions,sale.conditions,model_sale_conditions,account.group_account_invoice,1,1,1,1
+access_ReferenceCode,reference.code,model_reference_code,account.group_account_invoice,1,1,1,1
+access_economic_activity,economic.activity,model_economic_activity,account.group_account_invoice,1,1,1,1
+access_type_document,type.document,model_type_document,base.group_user,1,1,1,1
+access_autorization_document,autorization.document,model_autorization_document,,1,1,1,1
+access_reference_document,reference.document,model_reference_document,account.group_account_invoice,1,1,1,1
+access_resolution,access.resolution,model_resolution,base.group_user,1,1,1,1
+access_identification_type,identification.type,model_identification_type,base.group_user,1,1,1,1
+access_einvoice_sequence,einvoice.sequence,model_einvoice_sequence,base.group_user,1,1,1,1
+access_einvoice_sequence_lines,einvoice.sequence.lines,model_einvoice_sequence_lines,base.group_user,1,1,1,1
+access_account_move_supplier_import,account.move.supplier.import,model_account_move_supplier_import,base.group_user,1,1,1,1
+

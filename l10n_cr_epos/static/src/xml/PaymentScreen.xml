@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="pos_order_payment_screen_template" inherit_id="point_of_sale.template" xml:space="preserve">
+    <t t-name="PaymentScreenCR" t-inherit="point_of_sale.PaymentScreen" t-inherit-mode="extension" owl="1">
+
+        <xpath expr="//div[hasclass('right-content')]//section[hasclass('paymentlines-container')]" position="before">
+            <t t-if="show_to_send_hacienda">
+<!--                <div id="details" style=" padding: 16px;padding-top: 0;border-bottom: dashed 1px gainsboro;min-height: 154px;font-size: 20px;">-->
+                <div id="details" style=" padding: 16px;padding-top: 0;border-bottom: dashed 1px gainsboro;font-size: 20px;">
+                    <div style="display: inline-block; width: 100%; box-sizing: border-box; padding: 16px; text-align: left; float: left;">
+                        <label class="content-check">
+                            <input type="checkbox" id="check_sent_hacienda" t-on-click="trigger('envio-hacienda')"/>
+                            Enviar a Hacienda
+                            <i></i>
+                        </label>
+                    </div>
+
+                </div>
+                <t t-if="multi_currency">
+                    <div id="details_currencies" style=" padding: 16px;padding-top: 0;border-bottom: dashed 1px gainsboro;font-size: 20px;">
+                         <div style=" display: inline-block; width: 50%; box-sizing: border-box; padding: 16px; text-align: left; float: left;">
+                            <span class='label' style="font-size:20px"><b><u>Moneda</u></b></span>
+                            <br/>
+                            <div class="client-detail">
+                                <br/>
+                                <select class='drop-currency' name='id' style="font-size : 21px; border-radius:5px;" t-on-change="_ChangeCurrency('change',0,false)">
+                                    <option t-att-value="env.pos.currency.id">
+                                        <t t-esc="env.pos.currency.name" />
+                                    </option>
+                                    <t t-foreach='env.pos.currencies_ids' t-as='cur' t-key="cur.id">
+                                        <option t-att-value='cur.id'>
+                                            <t t-esc='cur.name'/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                        <div style="display: inline-block; width: 50%; box-sizing: border-box; padding: 16px; padding-left: 0; float: right;font-size: 15px;"
+                            class="id_convertion">
+                            <span class="label" style="font-size:20px"><b><u>Conversión</u></b></span>
+                            <div style="border: 3px solid black; padding: 5px; padding: 5px;border-radius: 5px;margin-top: 14px;margin-bottom: 11px;">
+                                <div>
+                                    <span class="label">1 <t t-esc='env.pos.currency.name'/> =  </span> <span class="currency_rate"/> <span class="currency_name"/>
+                                </div>
+                                <div>
+                                    <span class="label">Monto total = </span>
+                                    <b><span class="currency_symbol"/> <span class="currency_cal"/></b>
+                                    <input type="hidden" class="curr_cal" id="curr_cal"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+
+        </xpath>
+
+        <xpath expr="//div[hasclass('js_invoice')]" position="replace">
+            <div t-if="env.pos.config.module_account" class="button js_invoice"
+                 t-att-class="{ highlight: currentOrder.is_to_invoice() }"
+                 t-on-click="toggleIsToInvoice" style="display:none">
+                <i class="fa fa-file-text-o"/>Invoice
+            </div>
+        </xpath>
+	</t>
+    <t t-name="PaymentScreenStatusCR" t-inherit="point_of_sale.PaymentScreenStatus" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[hasclass('payment-status-remaining')]/span[1]" position="replace">
+            <span class="label">Saldo</span>
+        </xpath>
+        <xpath expr="//div[hasclass('payment-status-total-due')]" position="attributes">
+            <attribute name="style" add="font-size:25px !important"/>
+        </xpath>
+        <xpath expr="//div[hasclass('payment-status-total-due')]/span[1]" position="replace">
+            <span class="label">Total </span>
+        </xpath>
+        <xpath expr="//div[hasclass('payment-status-change')]/span[1]" position="replace">
+            <span class="label">Cambio</span>
+        </xpath>
+    </t>
+</templates>

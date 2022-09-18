@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_tax_form_view_inherit" model="ir.ui.view">
+        <field name="name">account.tax.form.view.inherit</field>
+        <field name="model">account.tax</field>
+        <field name="inherit_id" ref="account.view_tax_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="tax_code" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="iva_tax_desc" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="iva_tax_code" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="is_exoneration" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="percentage_exoneration" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </field>
+        </field>
+    </record>
+</odoo>

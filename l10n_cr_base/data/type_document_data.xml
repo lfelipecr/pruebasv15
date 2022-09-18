@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="document_factura_electronica" model="type.document">
+        <field name="sequence">1</field>
+        <field name="code">FE</field>
+        <field name="code_hacienda">01</field>
+        <field name="name">Factura electrónica</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">True</field>
+        <field name="in_purchase">False</field>
+    </record>
+
+    <record id="document_factura_electronica_exportacion" model="type.document">
+        <field name="sequence">3</field>
+        <field name="code">FEE</field>
+        <field name="code_hacienda">09</field>
+        <field name="name">Factura electrónica de exportación</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">True</field>
+        <field name="in_purchase">False</field>
+    </record>
+
+    <record id="document_tiquete_electronico" model="type.document">
+        <field name="sequence">4</field>
+        <field name="code">TE</field>
+        <field name="code_hacienda">04</field>
+        <field name="name">Tiquete electrónico</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">True</field>
+        <field name="in_purchase">False</field>
+    </record>
+
+    <record id="document_nota_credito" model="type.document">
+        <field name="sequence">8</field>
+        <field name="code">NC</field>
+        <field name="code_hacienda">03</field>
+        <field name="name">Nota de crédito</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">True</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+    <record id="document_nota_debito" model="type.document">
+        <field name="sequence">9</field>
+        <field name="code">ND</field>
+        <field name="code_hacienda">02</field>
+        <field name="name">Nota de debito</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">True</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+    <record id="document_aceptacion_mr" model="type.document">
+        <field name="sequence">5</field>
+        <field name="code">CCE</field>
+        <field name="code_hacienda">05</field>
+        <field name="name">Aceptación MR</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">False</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+    <record id="document_aceptacion_parcial_mr" model="type.document">
+        <field name="sequence">6</field>
+        <field name="code">CPCE</field>
+        <field name="code_hacienda">06</field>
+        <field name="name">Aceptación parcial de MR</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">False</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+     <record id="document_rechazo_mr" model="type.document">
+        <field name="sequence">7</field>
+        <field name="code">RCE</field>
+         <field name="code_hacienda">07</field>
+        <field name="name">Rechazo MR</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">False</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+     <record id="document_factura_electronica_compra" model="type.document">
+        <field name="sequence">2</field>
+        <field name="code">FEC</field>
+        <field name="code_hacienda">08</field>
+        <field name="name">Factura electrónica de compra</field>
+        <field name="active">true</field>
+        <field name="description">-</field>
+        <field name="in_sale">False</field>
+        <field name="in_purchase">True</field>
+    </record>
+
+</odoo>

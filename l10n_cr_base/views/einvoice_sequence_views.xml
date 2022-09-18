@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="einvoice_sequence_form_view" model="ir.ui.view">
+            <field name="name">einvoice.sequence.form</field>
+            <field name="model">einvoice.sequence</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <div class="oe_title">
+
+                            <label for="name" string="Identificador"/>
+                            <h1>
+                                <field name="name" placeholder="Compañia identidad / terminal / sucursal"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="sucursal"/>
+                                <field name="terminal"/>
+                            </group>
+                            <group>
+                                <field name="company_id" string="Compañia"/>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Secuencias" name="einvoice_sequence_liens">
+                                <div class="mb-3">
+                                    <button type="object" name="create_sequences" string="Genera secuencias" icon="fa-arrow-right" class="btn-primary"
+                                            title="Genera tus secuencias de forma automática"/>
+                                </div>
+                                <field name="line_ids">
+                                    <tree string="Secuencias" editable="bottom" limit="10">
+                                        <field name="e_inv_sequence_id" invisible="1"/>
+                                        <field name="company_id" invisible="1"/>
+                                        <field name="type_document_id"/>
+                                        <field name="e_sequence_id"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="einvoice_sequence_search_view" model="ir.ui.view">
+            <field name="name">einvoice.sequence.search</field>
+            <field name="model">einvoice.sequence</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" filter_domain="[('name','ilike',self)]" string="Nombre"/>
+                    <separator/>
+                    <filter name="active" string="No Activo" domain="[('active', '=', False)]"/>
+                    <separator/>
+                    <group expand="0" string="Agrupar por:">
+                        <filter string="Compañia" name="company_id" domain="" context="{'group_by':'company_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="einvoice_sequence_tree_view">
+            <field name="name">einvoice.sequence.tree</field>
+            <field name="model">einvoice.sequence</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="company_id" string="Compañia"/>
+                    <field name="sucursal" string="Sucursal"/>
+                    <field name="terminal" string="Terminal"/>
+                    <field name="name"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="einvoice_sequence_action" model="ir.actions.act_window">
+            <field name="name">Secuencias E-Facturación</field>
+            <field name="res_model">einvoice.sequence</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="einvoice_sequence_search_view"/>
+            <field name="context" eval="{'default_active': 1}"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Crea secuencias para tu facturación electrónica !</p>
+            </field>
+        </record>
+
+        <menuitem id="menu_einvoice_sequence_action"
+                  name="Secuencias E-Facturación"
+                  action="einvoice_sequence_action" sequence="60" parent="menu_electronic_invoice"
+                  groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+    </data>
+</odoo>

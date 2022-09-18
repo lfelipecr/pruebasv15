@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_costa_rica" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address">
+                <p style="font-size:12px" class="mb-5">
+                    <span>Factura electrónica :</span>
+                    <span t-esc="o.electronic_sequence"/>
+                    <br/>
+                    <span>Clave:</span>
+                    <span t-esc="o.number_electronic"/>
+                </p>
+                <address t-field="o.partner_id" t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}'/>
+                <div t-if="o.partner_id.vat" class="mt16">
+                    <t t-if="o.company_id.account_fiscal_country_id.vat_label" t-esc="o.company_id.account_fiscal_country_id.vat_label" id="inv_tax_id_label"/>
+                    <t t-else="">Tax ID</t>:
+                    <span t-field="o.partner_id.vat"/>
+                </div>
+            </t>
+
+        </xpath>
+    </template>
+    <!--    <template id="external_layout_standard_costa_rica" inherit_id="web.external_layout_standard">-->
+    <!--        <xpath expr="//div[@name='company_address']" position="inside">-->
+    <!--            <t t-if="o._name == 'account.move' ">-->
+    <!--                <t t-field="o._name" />-->
+    <!--            </t>-->
+    <!--        </xpath>-->
+    <!--    </template>-->
+    <!--     <template id="external_layout_boxed_costa_rica" inherit_id="web.external_layout_boxed">-->
+    <!--        <xpath expr="//div[@name='company_address']" position="after">-->
+    <!--             <div name="electronic_data" class="float-right mb4">-->
+    <!--                    <t t-if="o._name == 'account.move' ">-->
+    <!--                        Factura-e :-->
+    <!--                        <t t-esc="o.electronic_sequence"/> <br/>-->
+    <!--                        Clave:-->
+    <!--                        <t t-esc="o.number_electronic"/>-->
+    <!--                    </t>-->
+    <!--             </div>-->
+    <!--        </xpath>-->
+    <!--    </template>-->
+</odoo>

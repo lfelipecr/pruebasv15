@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- MODIFICACION DE VISTA DE ACCOUNT.MOVE -->
+    <record id="view_move_fecr_form" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <!-- Fields -->
+            <field name="partner_id" position="after">
+                <field name="state_selector_partner" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="type_document_id" invisible="1"/>
+                <field name="type_document_sale_id" attrs="{'invisible': [('move_type','not in', ['out_invoice','out_refund'] )]}"
+                       options="{'no_open': True, 'no_create': True}" placeholder="** Seleccione " groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="type_document_purchase_id" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}"
+                       options="{'no_open': True, 'no_create': True}" placeholder="** Seleccione " groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="reference_code_id" attrs="{'invisible': [('move_type','not in', ['out_refund','in_refund'] )]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </field>
+            <xpath expr="//group[@id='header_right_group']" position="inside">
+                 <field name="due_date" invisible="1"/>
+                <field name="payment_methods_id" attrs="{'invisible': [('move_type','=','entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="exchange_rate" attrs="{'invisible': [('move_type','=','entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="sequence_eline_id" invisible="1" groups="l10n_cr_places.module_einvoice_costa_rica"/> <!--Secuencia usada-->
+                 <field name="partner_has_exoneration" attrs="{'invisible': [('move_type','=','entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                 <field name="partner_exoneration_id" attrs="{'invisible': ['|',('move_type','=','entry'),('partner_has_exoneration','=',False)]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                 <field name="partner_exoneration_ids" invisible="1"/>
+                 <field name="partner_exoneration_info" attrs="{'invisible': ['|',('move_type','=','entry'),('partner_has_exoneration','=',False)]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+            <xpath expr="//field[@name='invoice_date']" position="after">
+                <field name="date_issuance" attrs="{'invisible': [('move_type','=','entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="attributes">
+                <attribute name="groups"></attribute>
+            </xpath>
+            <xpath expr="//group[1]" position="after">
+                <group>
+                    <field name="activity_id" attrs="{'invisible': [('move_type','=','entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                </group>
+            </xpath>
+            <xpath expr="//field[@name='tax_totals_json']" position="after">
+                <field name="amount_tax_return_electronic_invoice" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="amount_tax_electronic_invoice" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="amount_total_electronic_invoice" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+
+            <xpath expr="//field[@name='invoice_line_ids']//tree//field[@name='discount']" position="after">
+                <field name="discount_note" optional="hide" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+            <xpath expr="//button[@name='action_reverse']" position="attributes">
+                <attribute name="string">Agregar nota crédito</attribute>
+            </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page id="e-invoice_tab" string="Facturación electrónica" attrs="{'invisible': [('move_type', '=', 'entry')]}" groups="l10n_cr_places.module_einvoice_costa_rica">
+                    <group>
+                        <group string="Secuencias">
+                            <field name="electronic_sequence"/>
+                            <field name="consecutive_number_receiver" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}"/>
+                            <field name="number_electronic"/>
+                        </group>
+                        <group string="Referencias" style="width: 80px!important;">
+                            <field name="to_send" widget="boolean_toggle"/>
+                            <field name="from_mail" widget="boolean_toggle" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}"/>
+                            <field name="invoice_id" style="width: 180px!important;"/>
+                            <field name="state_send_customer" style="color:#24e112" attrs="{'invisible':[('move_type','not in',['out_invoice','out_refund'])]}"/>
+                            <field name="state_send_supplier" style="color:#24e112" attrs="{'invisible':[('move_type','not in',['in_invoice','in_refund'])]}"/>
+                            <field name="type_document_received_id" attrs="{'invisible': [('move_type','not in', ['in_invoice','in_refund'] )]}"
+                                   style="width: 180px!important;"/>
+                        </group>
+                    </group>
+                    <group string="Archivos xml">
+                        <field name="xml_invoice_name" invisible="1"/>
+                        <field name="xml_invoice" filename="xml_invoice_name"/>
+                        <field name="xml_invoice_supplier_approval_name" invisible="1"/>
+                        <label for="xml_invoice_supplier_approval" string="XML Recepcionado"
+                               attrs="{'invisible': ['&amp;',('move_type','not in', ['in_invoice','in_refund']),
+                                   ('xml_invoice_supplier_approval','=',False)]}"/>
+                        <div id="div_xml_invoice_supplier_approval">
+                            <field name="xml_invoice_supplier_approval" filename="xml_invoice_supplier_approval_name"
+                                   attrs="{'invisible': ['&amp;',('move_type','not in', ['in_invoice','in_refund']),
+                                   ('xml_invoice_supplier_approval','=',False)]}" class="mb-0 oe_inline"/>
+                            <button name="upload_xml_supplier" string="Cargar datos de XML" type="object" icon="fa-arrow-right"
+                                    class="btn btn-link pt-0"
+                                    attrs="{'invisible': [('xml_invoice_supplier_approval','=',False)]}"
+                            />
+                        </div>
+                        <field name="xml_response_name" invisible="1"/>
+                        <field name="xml_response" filename="xml_response_name"/>
+                    </group>
+                </page>
+            </xpath>
+
+            <!--MESSAGES HEADER SEND HACIENDA-->
+            <xpath expr="//header" position="after">
+                <div attrs="{'invisible': [('move_type','not in',('out_invoice','out_refund'))]}" groups="l10n_cr_places.module_einvoice_costa_rica">
+                    <div class="alert alert-success text-center o_form_header"
+                         attrs="{'invisible': [('state_send_customer', '!=', 'aceptado')]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_customer" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="alert alert-warning text-center o_form_header"
+                         attrs="{'invisible': [('state_send_customer', '!=', 'procesando')]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_customer" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="alert alert-danger text-center o_form_header"
+                         attrs="{'invisible': ['|',('state_send_customer', 'in', ('aceptado','procesando')),('state_send_customer','=',False)]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_customer" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                </div>
+
+                <div attrs="{'invisible': [('move_type','not in',('in_invoice','in_refund'))]}">
+                    <div class="alert alert-success text-center o_form_header"
+                         attrs="{'invisible': [('state_send_supplier', '!=', 'aceptado')]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_supplier" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="alert alert-warning text-center o_form_header"
+                         attrs="{'invisible': [('state_send_supplier', '!=', 'procesando')]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_supplier" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                    <div class="alert alert-danger text-center o_form_header"
+                         attrs="{'invisible': ['|',('state_send_supplier', 'in', ('aceptado','procesando')),('state_send_supplier','=',False)]}" role="status">
+                        <a class="close" data-dismiss="alert" href="#" aria-label="Close">x</a>
+                        <h4>
+                            <strong>Estado del comprobante electrónico en hacienda:
+                                <field name="state_send_supplier" style="text-transform: uppercase;"/>
+                                .
+                            </strong>
+                        </h4>
+                    </div>
+                </div>
+            </xpath>
+
+
+            <!-- Buttons -->
+            <button name="action_post" position="before">
+                <!--para clientes-->
+                <button name="action_send_hacienda" type="object" string="Enviar a Hacienda"
+                        confirm="Está seguro de continuar este proceso ?"
+                        attrs="{'invisible':['|','|','|',
+                        ('state_send_customer', '!=', False),
+                        ('electronic_sequence', '=', False),
+                        ('move_type','not in',['out_invoice','out_refund']),
+                        ('state','in',['draft','cancel'])]}"
+                        icon="fa-location-arrow"
+                        style="background: linear-gradient(to right, #f6586b 0%, #356782 51%, #ff6e7f 100%);color: white;FONT-WEIGHT: BOLD;"
+                        groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+                <button name="action_check_hacienda" type="object" string="Consultar a Hacienda" class="color_cr"
+                        attrs="{'invisible':['|','|',
+                        ('state_send_customer', 'in', (False, 'aceptado','rechazado')),
+                        ('move_type','not in',['out_invoice','out_refund']),
+                        ('state','in',('draft','cancel'))]}"
+                        icon="fa-search"
+                        style="background: linear-gradient(to right, #f6586b 0%, #356782 51%, #ff6e7f 100%);color: white;FONT-WEIGHT: BOLD;"
+                        groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+                <!--para proveedores-->
+                <button name="action_send_hacienda" type="object" string="Enviar a Hacienda"
+                        confirm="Está seguro de continuar este proceso ?"
+                        attrs="{'invisible':['|','|','|',
+                        ('state_send_supplier', '!=', False),
+                        ('electronic_sequence', '=', False),
+                        ('move_type','not in',['in_invoice']),
+                        ('state','in',['draft','cancel'])]}"
+                        icon="fa-location-arrow"
+                        style="background: linear-gradient(to right, #f6586b 0%, #356782 51%, #ff6e7f 100%);color: white;FONT-WEIGHT: BOLD;"
+                        groups="l10n_cr_places.module_einvoice_costa_rica"/>
+
+                <button name="action_check_hacienda" type="object" string="Consultar a Hacienda"
+                        attrs="{'invisible':['|','|',
+                        ('state_send_supplier', 'in', (False, 'aceptado','rechazado')),
+                        ('move_type','not in',['in_invoice']),
+                        ('state','in',('draft','cancel'))]}"
+                        icon="fa-search"
+                        style="background: linear-gradient(to right, #f6586b 0%, #356782 51%, #ff6e7f 100%);color: white;FONT-WEIGHT: BOLD;"
+                        groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </button>
+
+            <xpath expr="//button[@name='button_cancel'][2]" position="after">
+                <button name="button_cancel_invoice" string="Cancelar" type="object" groups="account.group_account_invoice" data-hotkey="w"
+                        attrs="{'invisible' : ['|', '|', '|','|',
+                                ('id', '=', False),
+                                ('state', '!=', 'posted'),
+                                ('move_type', '==', 'entry'),
+                                ('state_send_customer','=','aceptado'),
+                                ('state_send_supplier','=','aceptado')]}"/>
+            </xpath>
+            <xpath expr="//button[@name='button_draft']" position="attributes">
+                <attribute name="attrs">{'invisible' : ['|','|',('show_reset_to_draft_button', '=', False),('state_send_customer','=','aceptado'),('state_send_supplier','=','aceptado')]}</attribute>
+            </xpath>
+
+
+        </field>
+    </record>
+
+
+    <!-- MODIFICACION DE VISTA DE ACCOUNT.MOVE TREE -->
+    <record id="view_invoice_fecr_tree" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+              <xpath expr="//field[@name='invoice_date_due']" position="after">
+                <field name="invoice_payment_term_id" optional="show" />
+            </xpath>
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="state_send_customer" optional="show" invisible="context.get('default_move_type') not in ('out_invoice', 'out_refund')" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="electronic_sequence" optional="show" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                <field name="number_electronic" optional="show" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_in_invoice_bill_fecr_tree" model="ir.ui.view">
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_in_invoice_bill_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='state']" position="after">
+                <field name="state_send_supplier" optional="show" invisible="context.get('default_move_type') not in ('in_invoice', 'in_refund')" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- MODIFICACION DE VISTA PARA OCULTAR CAMPOS INNECESARIOS : ACCOUNT_EDI -->
+    <record id="view_move_form_edi_inherit" model="ir.ui.view">
+        <field name="name">account.move.form.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account_edi.view_move_form_inherit"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@id='edi_documents']" position="attributes">
+                <attribute name="attrs"></attribute>
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="window_account_move_generate_xml" model="ir.actions.server">
+        <field name="name">Generar xml</field>
+        <field name="model_id" ref="account.model_account_move"/>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.generate_xml()</field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_electronic_invoice" name="Facturación electrónica" parent="account.menu_finance_configuration" sequence="1"
+              groups="l10n_cr_places.module_einvoice_costa_rica"/>
+</odoo>

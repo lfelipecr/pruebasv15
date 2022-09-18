@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_order_electronic_invoice_form" model="ir.ui.view">
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='fiscal_position_id']" position="after">
+                <field name="currency_id"/>
+                <field name="currency_rate_usd_crc" string="Tipo de cambio"/>
+                <field name="order_id"/>
+                <field name="reference_code_id"/>
+                <field name="paid_other_form"/>
+                <field name="is_return"/>
+            </xpath>
+            <xpath expr="//button[@name='action_pos_order_invoice']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='products']" position="after">
+                <page string="Facturación electrónica" id="page_invoice_electronic">
+                    <group>
+                        <group string="Secuencias">
+                            <field name="code_document_type"/>
+                            <field name="type_document_id"/>
+                            <field name="electronic_sequence"/>
+                            <field name="number_electronic"/>
+                        </group>
+                        <group string="Referencias" style="width: 80px!important;">
+                            <field name="date_issuance"/>
+                            <field name="to_send" widget="boolean_toggle"/>
+                            <field name="state_send_customer" style="color:#24e112"/>
+                        </group>
+                    </group>
+                    <group string="Archivos xml">
+                        <field name="xml_invoice_name" invisible="1" readonly="1"/>
+                        <field name="xml_invoice" filename="xml_invoice_name" style="color:#0f4d9b"/>
+                        <field name="xml_response_name" invisible="1" placeholder="No hay XML"/>
+                        <field name="xml_response" filename="xml_response_name" style="color:#0f4d9b"/>
+                    </group>
+
+                    <!--                    -->
+                    <!--                    <group>-->
+                    <!--                        <div>-->
+                    <!--                            <span class="oe_inline" style="color:#07b1b8;font-size:16px">-->
+                    <!--                                <strong>Datos de envío:</strong>-->
+                    <!--                            </span>-->
+                    <!--                        </div>-->
+                    <!--                        <group style="width: 25%">-->
+                    <!--                            <field name="code_document_type"/>-->
+                    <!--                            <field name="type_document_id"/>-->
+                    <!--                            <field name="electronic_sequence"/>-->
+                    <!--                            <field name="number_electronic"/>-->
+                    <!--                        </group>-->
+                    <!--                        <group style="width: 41%">-->
+                    <!--                            <field name="date_issuance"/>-->
+                    <!--                            <field name="state_send_customer" style="color:#24e112"/>-->
+                    <!--                            <field name="to_send" string="Enviar a Hacienda"/>-->
+
+                    <!--                        </group>-->
+                    <!--                    </group>-->
+                    <!--                    <group>-->
+                    <!--                        <div>-->
+                    <!--                            <span class="oe_inline" style="color:#0972a2;font-size:16px">-->
+                    <!--                                <strong>XML:</strong>-->
+                    <!--                            </span>-->
+                    <!--                        </div>-->
+                    <!--                        <group style="width: 65%">-->
+                    <!--                            <field name="xml_invoice_name" invisible="1" readonly="1"/>-->
+                    <!--                            <field name="xml_invoice" filename="xml_invoice_name" style="color:#0f4d9b"/>-->
+                    <!--                            <field name="xml_response_name" invisible="1" placeholder="No hay XML"/>-->
+                    <!--                            <field name="xml_response" filename="xml_response_name" style="color:#0f4d9b"/>-->
+
+                    <!--                        </group>-->
+                    <!--                    </group>-->
+                </page>
+            </xpath>
+            <xpath expr="//sheet[1]" position="after">
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='payment_ids']//tree//field[@name='payment_method_id']" position="after">
+                <field name="is_other_currency" optional="show"/>
+            </xpath>
+
+            <xpath expr="//group[@name='order_total']" position="inside">
+                <field name="other_currency_id" invisible="1"/>
+                <field name="amount_paid_currency"
+                       string="Monto pagado(Otra moneda)"
+                       class="oe_subtotal_footer_separator"
+                       widget="monetary"
+                       options="{'currency_field': 'other_currency_id'}"
+                       attrs="{'invisible': [('paid_other_form','=', 'no')]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pos_order_electronic_invoice_tree" model="ir.ui.view">
+        <field name="name">pos.order.electronic.invoice.tree</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="state" position="before">
+                <field name="state_send_customer"/>
+                <field name="state_email"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="window_xml_generate_wizard" model="ir.actions.server">
+        <field name="name">Generar xml</field>
+        <field name="model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.generate_xml()</field>
+    </record>
+
+    <record id="window_send_hacienda_wizard" model="ir.actions.server">
+        <field name="name">Enviar a hacienda</field>
+        <field name="model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.sent_to_hacienda()</field>
+    </record>
+
+    <record id="window_get_hacienda_wizard" model="ir.actions.server">
+        <field name="name">Consultar a hacienda</field>
+        <field name="model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_model_id" ref="point_of_sale.model_pos_order"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">action = records.get_from_hacienda()</field>
+    </record>
+
+</odoo>

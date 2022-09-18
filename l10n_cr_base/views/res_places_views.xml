@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_country_state_costa_rica" model="ir.actions.act_window">
+        <field name="name">Provincias</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.country.state</field>
+        <field name="domain">[('country_id.code','=','CR')]</field>
+        <field name="view_id" ref="base.view_country_state_tree"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a State
+            </p>
+            <p>
+                Federal States belong to countries and are part of your contacts' addresses.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_resolution" name="Provincias" parent="l10n_cr_places.menu_places_costa_rica" sequence="10" action="action_country_state_costa_rica"
+              groups="l10n_cr_places.module_einvoice_costa_rica"/>
+</odoo>

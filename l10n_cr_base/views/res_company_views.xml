@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="company_form_view_inherit" model="ir.ui.view">
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+               <!-- <field name="website" position="before">
+                    <field name="activity_ids" widget="many2many_tags"/>
+                    <field name="activity_default_id" domain="[('id', 'in', activity_ids)]"/>
+                </field>-->
+                <field name="vat" position="before">
+                    <field name="identification_id" groups="l10n_cr_places.module_einvoice_costa_rica"/>
+                </field>
+                 <xpath expr="//div[@class='oe_title']" position="after">
+                    <div class="row col-12">
+                        <field name="chart_template_id" invisible="1"/>
+                        <button name="assign_chart_template_id_cr" string="Plan contable" type="object" class="btn-primary"
+                                attrs="{'invisible': [('chart_template_id', '!=', False)]}" title="Asignar el plan contable de Costa Rica"/>
+                        <button name="assign_tax_ids_cr" string="Impuestos" type="object" class="btn-primary ml-3"
+                                attrs="{'invisible': [('chart_template_id', '==', False)]}" title="Asignar los impuestos de Costa Rica"/>
+                    </div>
+
+                 </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--TIPO DE CAMBIO-->
+    <record id="currency_crc_rate_cron" model="ir.cron">
+        <field name="name">Actualizar Tipo de Cambio</field>
+        <field name="model_id" ref="model_res_currency_rate"/>
+        <field name="state">code</field>
+        <field name="code">model.update_crc_usd_rate()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="nextcall" eval="(DateTime.now()).strftime('%Y-%m-%d 13:30:00')" />
+        <field name="active">True</field>
+    </record>
+
+
+     <!--FACTURACIÓN ELECTRÓNICA-->
+     <record id="ir_cron_consultahacienda_customer" model="ir.cron">
+        <field name="name">Consulta en Hacienda E-Comprobantes clientes</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.check_einvoices('customer')</field>
+    </record>
+
+    <record id="ir_cron_consultahacienda_supplier" model="ir.cron">
+        <field name="name">Consulta en Hacienda E-Comprobantes proveedores</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="model_id" ref="model_account_move"/>
+        <field name="state">code</field>
+        <field name="code">model.check_einvoices('supplier')</field>
+    </record>
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.module.category" id="module_einvoice">
+            <field name="name">Facturación electrónica CR</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="module_einvoice_costa_rica" model="res.groups">
+            <field name="name">Costa Rica</field>
+            <field name="comment">Mostrar campos de facturación electrónica para Costa Rica.</field>
+            <field name="category_id" ref="l10n_cr_places.module_einvoice"/>
+        </record>
+    </data>
+</odoo>

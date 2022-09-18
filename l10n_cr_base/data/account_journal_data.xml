@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="e_invoice_sale_account_journal" model="account.journal">
+            <field name="name">E-Comprobantes Clientes</field>
+            <field name="code">JEC</field>
+            <field name="type">sale</field>
+            <field name="sequence">10</field>
+            <field name="e_invoice_check">True</field>
+        </record>
+        <record id="e_invoice_purchase_account_journal" model="account.journal">
+            <field name="name">E-Comprobantes Proveedores</field>
+            <field name="code">JEP</field>
+            <field name="type">purchase</field>
+            <field name="sequence">15</field>
+            <field name="e_invoice_check">True</field>
+        </record>
+    </data>
+</odoo>
